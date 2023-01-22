@@ -1,0 +1,15 @@
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\TodosMisServidores.exe
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\TodosMisServidores.deps.json
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\TodosMisServidores.runtimeconfig.json
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\TodosMisServidores.dll
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\ref\TodosMisServidores.dll
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\bin\Debug\net6.0\TodosMisServidores.pdb
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.csproj.AssemblyReference.cache
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.AssemblyInfoInputs.cache
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.AssemblyInfo.cs
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.dll
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\ref\TodosMisServidores.dll
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.pdb
+C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\TodosMisServidores\TodosMisServidores\obj\Debug\net6.0\TodosMisServidores.genruntimeconfig.cache

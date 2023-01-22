@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a873c0c1-a85b-44af-8389-fad9709e677f": {
+      "ProjectGuid": "a873c0c1-a85b-44af-8389-fad9709e677f",
+      "DisplayName": "TodosMisServidores",
+      "ColorIndex": 0
+    },
+    "e575f699-809f-43e8-9d20-9cebf5bb5c36": {
+      "ProjectGuid": "e575f699-809f-43e8-9d20-9cebf5bb5c36",
+      "DisplayName": "ClienteBase",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
