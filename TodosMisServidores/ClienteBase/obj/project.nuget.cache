@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "k4yxQup9yDmj5Hy28wGTaDlhSlwm6STfoTXDlkP8Mj/UN8IStxWKAGVXtKw0ABADe26vypK2mAgzNTnei23d4g==",
+  "dgSpecHash": "tpzztuwk1BoWMsUBauVhXQ6Qgg4wDLT5+5pz4dQS326jvQ/fPlL240bJ1VcKuwTSTuvrgGYsDdxLcLUYP8Ps4g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pablo\\Desktop\\Repositorios de ejercicios de clase\\Servicios\\TodosMisServidores\\ClienteBase\\ClienteBase.csproj",
+  "projectFilePath": "C:\\Users\\Pablo\\Desktop\\Servicios\\TodosMisServidores\\ClienteBase\\ClienteBase.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
