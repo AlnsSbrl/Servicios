@@ -13,17 +13,17 @@ namespace ClienteServidorPorTurnos
 {
     public partial class FormConexion : Form
     {
-        public IPAddress ip;
-        public int port;
+        public IPAddress? ip;
+        public int? port;
         int numParser;
         IPAddress ipParser;
-        public FormConexion(IPAddress ip, int puerto)
+        public FormConexion(string ip, int puerto)
         {
             InitializeComponent();
-            txbAntiguaIP.Text = ip.ToString();
+            txbAntiguaIP.Text =ip.ToString();
             txbAntiguoPuerto.Text = puerto.ToString();
-            this.ip = ip;
-            this.port = puerto;
+            this.ip=IPAddress.Parse(ip);          
+            port = puerto;
         }
 
         private void FormConexion_FormClosing(object sender, FormClosingEventArgs e)
@@ -38,6 +38,7 @@ namespace ClienteServidorPorTurnos
                 {
                     ip = ipParser;
                 }
+              
             }
         }
 
@@ -53,7 +54,7 @@ namespace ClienteServidorPorTurnos
                 txbNuevoPuerto.BackColor = (pruebaAdiccional = int.TryParse(txbNuevoPuerto.Text, out numParser)||txbNuevoPuerto.Text=="") ? Color.White : Color.Red;
                 if (pruebaAdiccional)
                 {
-                    txbNuevoPuerto.BackColor = (numParser < IPEndPoint.MaxPort && numParser > IPEndPoint.MinPort) ? Color.White : Color.Red;
+                    txbNuevoPuerto.BackColor = (numParser < IPEndPoint.MaxPort && numParser > IPEndPoint.MinPort) || txbNuevoPuerto.Text == "" ? Color.White : Color.Red;
                 }
             }
         }
