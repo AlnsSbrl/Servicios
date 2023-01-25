@@ -12,9 +12,8 @@ namespace TodosMisServidores
     {
         IPAddress ip;
         int port;
-        bool activeService;
         string password;
-
+        Socket s;
         public Servicio(int port)
         {
             ip = IPAddress.Loopback;
@@ -22,47 +21,40 @@ namespace TodosMisServidores
         }
         public void conexion(int opcionServicio)
         {
-            activeService = true;
             IPEndPoint ie = new IPEndPoint(IPAddress.Any, port);
-            //hacer comprobacion de puerto ocupado
-            using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
             {
-                try
-                {
-                    s.Bind(ie);
-                    s.Listen(10);
-                }
-                catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
-                {
-                    activeService = false;
-                    Console.WriteLine("puerto ocupao");
-                }
-                while (activeService)
+                s.Bind(ie);
+                s.Listen(10);
+                while (true)
                 {
                     Console.WriteLine("aber conectense");
-                    //se queda esperando aqui el servidor hasta que llega otro cliente. Cuando llega este, NO le atiende y se cierra
                     Socket sClient = s.Accept();
-                    //supuestamente está "mal" ya que no se cierra al instante...pero al estar el cliente atendiéndose en un hilo.......
-                    //cómo lo haria???
                     Thread clientThread;
-                    if (activeService)
+                    switch (opcionServicio)
                     {
-                        switch (opcionServicio)
-                        {
-                            case 1:
-                                clientThread = new Thread(FechaHora);
-                                break;
-                            default:
-                                clientThread = null;
-                                break;
-                        }
-                        if (clientThread == null) break;
-                        clientThread.Start(sClient);
+                        case 1:
+                            clientThread = new Thread(FechaHora);
+                            break;
+                        default:
+                            clientThread = null;
+                            break;
                     }
+                    if (clientThread == null) break;
+                    clientThread.Start(sClient);
                 }
-                Console.WriteLine("Curro, I don't feel so good......");
+            }
+            catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
+            {
+                Console.WriteLine("puerto ocupao");
+            }
+            catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
+            {
+                Console.WriteLine("imma head out");
             }
         }
+
 
         public void FechaHora(object socketClient)
         {
@@ -73,21 +65,18 @@ namespace TodosMisServidores
             using (StreamReader sr = new StreamReader(ns))
             using (StreamWriter sw = new StreamWriter(ns))
             {
-                sw.AutoFlush = true;
-                //sw.WriteLine("Wellcome to the dating app");
-                //string opcion = sr.ReadLine();
-                //Console.WriteLine(opcion);
+                sw.AutoFlush = true;             
                 string? input = sr.ReadLine();
-                string[] inputUser;// = sr.ReadLine(); Split(" ");
+                string[] inputUser;
                 if (input != null)
                 {
-                    inputUser = input.Split(" ");                   
+                    inputUser = input.Split(" ");
                     if (inputUser.Length == 1 && inputUser != null)
                     {
-                        switch (inputUser[0]) //igual no es lo mejor hacer esto, por lo menos en el caso de la contraseña
+                        switch (inputUser[0]) 
                         {
                             case "time":
-                                sw.WriteLine(DateTime.UtcNow.TimeOfDay); //me da pereza ponerlo sin ms
+                                sw.WriteLine(DateTime.UtcNow.TimeOfDay); //me da pereza ponerlo sin milliseconds
                                 break;
                             case "date":
                                 sw.WriteLine($"{DateTime.UtcNow.Day}/{DateTime.UtcNow.Month}/{DateTime.UtcNow.Year}");
@@ -127,13 +116,13 @@ namespace TodosMisServidores
                         string laPass = "";
                         for (int i = 0; i < inputUser.Length - 1; i++)
                         {
-                            laPass += inputUser[i + 1]+" ";
+                            laPass += inputUser[i + 1] + " ";
                         }
-                        laPass= laPass.TrimEnd(' ');
+                        laPass = laPass.TrimEnd(' ');
                         if (laPass == password)
                         {
                             sw.WriteLine("LONG  LIVE    THE KING");
-                            activeService = false;
+                            s.Close();
                         }
                         else
                         {
@@ -144,7 +133,7 @@ namespace TodosMisServidores
                     {
                         sw.WriteLine("Error, connect and try again. Use the 'help' command to know the correct syntax to use next time u lonely fucker");
                     }
-                }               
+                }
                 socket.Close();
             }
         }
