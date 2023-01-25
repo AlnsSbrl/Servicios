@@ -6,17 +6,17 @@ namespace ClienteServidorPorTurnos
     public partial class Form1 : Form
     {
         string ip;
-        int port;// = 0;
+        int port;
         string respuestaServidor;
         public Form1()
         {
             InitializeComponent();
-
+            Icon = Properties.Resources.Twitter_icon_icons_com_66803;
+            label2.Text = "";
             btnCambiarConexion.Text = txbDNIUsuario.Enabled ? "Cambiar conexión" : "Establecer conexión";
-
             try
             {
-                using (ConnectionDataReader wr = new ConnectionDataReader(new FileStream(Environment.CurrentDirectory+"/data.bin", FileMode.Open)))
+                using (ConnectionDataReader wr = new ConnectionDataReader(new FileStream(Environment.CurrentDirectory + "/data.bin", FileMode.Open)))
                 {
                     txbDNIUsuario.Text = wr.ReadString();
                     ip = wr.ReadString();
@@ -36,40 +36,58 @@ namespace ClienteServidorPorTurnos
                 {
                     throw;
                 }
-            }
-            //aqui inicializar los valores de IP y port leyendo. Si no se hace estarán deshabilitados el resto de botones
+            }        
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), (int)port);
-            Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sock.Connect(iPEndPoint);
-            using (NetworkStream ns = new NetworkStream(sock))
-            using (StreamReader sr = new StreamReader(ns))
-            using (StreamWriter sw = new StreamWriter(ns))
+            Socket sock = null;
+            bool hasConnected;
+            try
             {
-                sw.AutoFlush = true;
-                sw.WriteLine(((Button)sender).Tag.ToString().ToLower());
-                respuestaServidor = sr.ReadLine(); //supongo que aunque sea una lista de cosas sigue siendo una string (larga but)
-                //supongo que dependiendo de la respuesta (o del sender) coloco esto en un lado u otro
-                if ((Button)sender == btnList)
-                {
-                    listBox1.Items.AddRange(respuestaServidor.Split('\n'));
-                }
-                else
-                {
-                    label2.Text=respuestaServidor;
-                }
+                IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), (int)port);
+                sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                sock.Connect(iPEndPoint);
+                hasConnected = true;
             }
-            sock.Close();
+            catch (SocketException)
+            {
+                label2.Text = "mi pana no se pudo establecer conexión :(";
+                setEnable(false);
+                hasConnected = false;
+            }
+            if (hasConnected)
+            {
+                using (NetworkStream ns = new NetworkStream(sock))
+                using (StreamReader sr = new StreamReader(ns))
+                using (StreamWriter sw = new StreamWriter(ns))
+                {
+                    sw.AutoFlush = true;
+                    sw.WriteLine("user " + txbDNIUsuario.Text);
+                    label2.Text = sr.ReadLine();
+                    sw.WriteLine(((Button)sender).Tag.ToString().ToLower());
+                    respuestaServidor = sr.ReadLine();
+                    label2.Text = respuestaServidor;
+                    if ((Button)sender == btnList)
+                    {
+                        listAlumnos.Items.Clear();
+                        do
+                        {
+                            string? alumno = sr.ReadLine();
+                            if (alumno == null) break;
+                            listAlumnos.Items.Add(alumno);
+                        } while (true);
+                    }
+                }
+                sock.Close();
+            }
         }
         private void setEnable(bool setEnable)
         {
             txbDNIUsuario.Enabled = setEnable;
             btnAdd.Enabled = setEnable;
             btnList.Enabled = setEnable;
-            btnCambiarConexion.Text = setEnable?"Cambiar conexión":"Nueva conexión";
+            btnCambiarConexion.Text = setEnable ? "Cambiar conexión" : "Nueva conexión";
         }
 
         private void btnCambiarConexion_Click(object sender, EventArgs e)
@@ -86,7 +104,6 @@ namespace ClienteServidorPorTurnos
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
             try
             {
                 using (ConnectionDataWriter wr = new ConnectionDataWriter(new FileStream(Environment.CurrentDirectory + "/data.bin", FileMode.Create)))
@@ -96,10 +113,8 @@ namespace ClienteServidorPorTurnos
             }
             catch (IOException)
             {
-
-                throw;
+                Console.WriteLine("no sabe escribir");
             }
-
         }
     }
 }

@@ -13,8 +13,7 @@ namespace ClienteBase
 
         private void commandButtonClick(object sender, EventArgs e)
         {
-            IPEndPoint ie = new IPEndPoint(IPAddress.Parse(IP_SERVER), port);
-            
+            IPEndPoint ie = new IPEndPoint(IPAddress.Parse(IP_SERVER), port);      
             Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -24,7 +23,8 @@ namespace ClienteBase
                 using (StreamWriter sw = new StreamWriter(ns))
                 {
                     sw.AutoFlush = true;
-                    string accion = (string)((Button)sender).Tag + " " + txtPassword.Text;
+                    string envio = (string)((Button)sender).Tag;
+                    string accion = (Button)sender==btnClose && txtPassword.Text!=""? envio + " " + txtPassword.Text:envio;
                     sw.WriteLine(accion);
                     string? nuevoTexto = sr.ReadLine();
                     lblResult.Text = nuevoTexto;

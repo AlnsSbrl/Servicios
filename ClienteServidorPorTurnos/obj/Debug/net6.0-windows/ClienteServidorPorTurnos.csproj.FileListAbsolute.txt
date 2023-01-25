@@ -16,3 +16,4 @@ C:\Users\Pablo\Desktop\Servicios\ClienteServidorPorTurnos\obj\Debug\net6.0-windo
 C:\Users\Pablo\Desktop\Servicios\ClienteServidorPorTurnos\obj\Debug\net6.0-windows\ClienteServidorPorTurnos.pdb
 C:\Users\Pablo\Desktop\Servicios\ClienteServidorPorTurnos\obj\Debug\net6.0-windows\ClienteServidorPorTurnos.genruntimeconfig.cache
 C:\Users\Pablo\Desktop\Servicios\ClienteServidorPorTurnos\obj\Debug\net6.0-windows\ref\ClienteServidorPorTurnos.dll
+C:\Users\Pablo\Desktop\Servicios\ClienteServidorPorTurnos\obj\Debug\net6.0-windows\ClienteServidorPorTurnos.Properties.Resources.resources

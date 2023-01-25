@@ -53,7 +53,7 @@ namespace ClienteBase
                 txbNuevoPuerto.BackColor = (pruebaAdiccional = int.TryParse(txbNuevoPuerto.Text, out numParser)||txbNuevoPuerto.Text=="") ? Color.White : Color.Red;
                 if (pruebaAdiccional)
                 {
-                    txbNuevoPuerto.BackColor = (numParser < IPEndPoint.MaxPort && numParser > IPEndPoint.MinPort) ? Color.White : Color.Red;
+                    txbNuevoPuerto.BackColor = (numParser < IPEndPoint.MaxPort && numParser > IPEndPoint.MinPort) || txbNuevoPuerto.Text == "" ? Color.White : Color.Red;
                 }
             }
         }
