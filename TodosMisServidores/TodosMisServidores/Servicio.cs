@@ -14,6 +14,7 @@ namespace TodosMisServidores
         int port;
         string password;
         Socket s;
+        bool occupiedSocket;
         public Servicio(int port)
         {
             ip = IPAddress.Loopback;
@@ -21,38 +22,49 @@ namespace TodosMisServidores
         }
         public void conexion(int opcionServicio)
         {
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, port);
-            s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            try
+            do
             {
-                s.Bind(ie);
-                s.Listen(10);
-                while (true)
+                IPEndPoint ie = new IPEndPoint(IPAddress.Any, port);
+                s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                try
                 {
-                    Console.WriteLine("aber conectense");
-                    Socket sClient = s.Accept();
-                    Thread clientThread;
-                    switch (opcionServicio)
+                    s.Bind(ie);
+                    s.Listen(10);
+                    while (true)
                     {
-                        case 1:
-                            clientThread = new Thread(FechaHora);
-                            break;
-                        default:
-                            clientThread = null;
-                            break;
+                        Console.WriteLine("aber conectense a " + port);
+                        Socket sClient = s.Accept();
+                        Thread clientThread;
+                        switch (opcionServicio)
+                        {
+                            case 1:
+                                clientThread = new Thread(FechaHora);
+                                break;
+                            default:
+                                clientThread = null;
+                                break;
+                        }
+                        if (clientThread == null) break;
+                        clientThread.Start(sClient);
                     }
-                    if (clientThread == null) break;
-                    clientThread.Start(sClient);
                 }
-            }
-            catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
-            {
-                Console.WriteLine("puerto ocupao");
-            }
-            catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
-            {
-                Console.WriteLine("imma head out");
-            }
+                catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
+                {
+                    Console.WriteLine("puerto ocupao");
+                    port += 1000;
+                    occupiedSocket = true;//AQUI HAY QUE HACER MAS COSAS, varios intentos, a gusto de programador
+                }
+                catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressNotAvailable)
+                {
+                    Console.WriteLine("no se ha encontrao un puerto libre");
+                    occupiedSocket = false;
+                }
+                catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
+                {
+                    Console.WriteLine("imma head out");
+                    occupiedSocket = false;
+                }
+            } while (occupiedSocket);
         }
 
 
@@ -65,7 +77,7 @@ namespace TodosMisServidores
             using (StreamReader sr = new StreamReader(ns))
             using (StreamWriter sw = new StreamWriter(ns))
             {
-                sw.AutoFlush = true;             
+                sw.AutoFlush = true;
                 string? input = sr.ReadLine();
                 string[] inputUser;
                 if (input != null)
@@ -73,7 +85,7 @@ namespace TodosMisServidores
                     inputUser = input.Split(" ");
                     if (inputUser.Length == 1 && inputUser != null)
                     {
-                        switch (inputUser[0]) 
+                        switch (inputUser[0])
                         {
                             case "time":
                                 sw.WriteLine(DateTime.UtcNow.TimeOfDay); //me da pereza ponerlo sin milliseconds
