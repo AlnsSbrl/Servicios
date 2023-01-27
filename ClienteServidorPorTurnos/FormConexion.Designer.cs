@@ -90,6 +90,7 @@
             this.btnCancelar.TabIndex = 5;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
@@ -144,7 +145,6 @@
             this.Controls.Add(this.txbAntiguaIP);
             this.Name = "FormConexion";
             this.Text = "FormConexion";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormConexion_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

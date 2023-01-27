@@ -94,7 +94,7 @@ namespace ClienteServidorPorTurnos
         {
             FormConexion f = new FormConexion(ip, port);
             f.ShowDialog();
-            if (f.DialogResult == DialogResult.OK && !f.ip.Equals("0") && f.port != 0)
+            if (f.DialogResult == DialogResult.OK && f.ip.ToString()=="0" && f.port != 0)
             {
                 ip = f.ip.ToString();
                 port = (int)f.port;
