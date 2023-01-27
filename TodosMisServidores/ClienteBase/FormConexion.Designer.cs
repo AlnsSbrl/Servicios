@@ -144,7 +144,6 @@
             this.Controls.Add(this.txbAntiguaIP);
             this.Name = "FormConexion";
             this.Text = "FormConexion";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormConexion_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

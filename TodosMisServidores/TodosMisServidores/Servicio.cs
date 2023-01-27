@@ -105,9 +105,10 @@ namespace TodosMisServidores
                         {
                             string texto = Environment.GetEnvironmentVariable("ProgramData") + "/password.txt";
                             Console.WriteLine("ruta: " + texto);
-                            StreamReader srpass = new StreamReader(texto);
-                            password = srpass.ReadLine();
-                            srpass.Close();
+                            using (StreamReader srpass = new StreamReader(texto))
+                            {
+                                password = srpass.ReadLine();
+                            }
                         }
                         catch (IOException)
                         {

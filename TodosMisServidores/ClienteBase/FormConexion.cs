@@ -23,23 +23,9 @@ namespace ClienteBase
             txbAntiguaIP.Text = ip.ToString();
             txbAntiguoPuerto.Text = puerto.ToString();
             this.ip = ip;
-            this.port = puerto;
+            port = puerto;
         }
-
-        private void FormConexion_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (DialogResult == DialogResult.OK)
-            {
-                if (txbNuevoPuerto.BackColor == Color.White && txbNuevoPuerto.Text != "")
-                {
-                    port = numParser;
-                }
-                if (txbNuevaIP.BackColor == Color.White && txbNuevaIP.Text != "")
-                {
-                    ip = ipParser;
-                }
-            }
-        }
+      
 
         private void txbNuevaIP_TextChanged(object sender, EventArgs e)
         {
@@ -60,7 +46,14 @@ namespace ClienteBase
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            if (txbNuevoPuerto.BackColor == Color.White && txbNuevoPuerto.Text != "")
+            {
+                port = numParser;
+            }
+            if (txbNuevaIP.BackColor == Color.White && txbNuevaIP.Text != "")
+            {
+                ip = ipParser;
+            }
             if ((Button)sender == btnGuardar)
             {
                 DialogResult = DialogResult.OK;
@@ -69,7 +62,6 @@ namespace ClienteBase
             {
                 DialogResult = DialogResult.Cancel;
             }
-
         }
     }
 }

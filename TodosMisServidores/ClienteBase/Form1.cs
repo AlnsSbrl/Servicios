@@ -13,7 +13,7 @@ namespace ClienteBase
 
         private void commandButtonClick(object sender, EventArgs e)
         {
-            IPEndPoint ie = new IPEndPoint(IPAddress.Parse(IP_SERVER), port);      
+            IPEndPoint ie = new IPEndPoint(IPAddress.Parse(IP_SERVER), port);
             Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -24,7 +24,7 @@ namespace ClienteBase
                 {
                     sw.AutoFlush = true;
                     string envio = (string)((Button)sender).Tag;
-                    string accion = (Button)sender==btnClose && txtPassword.Text!=""? envio + " " + txtPassword.Text:envio;
+                    string accion = (Button)sender == btnClose && txtPassword.Text != "" ? envio + " " + txtPassword.Text : envio;
                     sw.WriteLine(accion);
                     string? nuevoTexto = sr.ReadLine();
                     lblResult.Text = nuevoTexto;
@@ -43,10 +43,13 @@ namespace ClienteBase
 
         private void changeConnectionClick(object sender, EventArgs e)
         {
-            FormConexion f = new FormConexion(IPAddress.Parse(IP_SERVER), port); //esto literalmente es el ENDPOINT
+            FormConexion f = new FormConexion(IPAddress.Parse(IP_SERVER), port); 
             f.ShowDialog();
-            this.IP_SERVER = f.ip.ToString();
-            this.port = f.port;
+            if (f.DialogResult == DialogResult.OK)
+            {
+                IP_SERVER = f.ip.ToString();
+                port = f.port;
+            }
         }
     }
 }
