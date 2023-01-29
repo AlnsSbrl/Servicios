@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ChatRoom\\ChatRoom.csproj",
+      "projectUniqueName": "C:\\Users\\Pablo\\Desktop\\Repositorios de ejercicios de clase\\Servicios\\ChatRoom\\ChatRoom.csproj",
       "projectName": "ChatRoom",
-      "projectPath": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ChatRoom\\ChatRoom.csproj",
+      "projectPath": "C:\\Users\\Pablo\\Desktop\\Repositorios de ejercicios de clase\\Servicios\\ChatRoom\\ChatRoom.csproj",
       "packagesPath": "C:\\Users\\Pablo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ChatRoom\\obj\\",
+      "outputPath": "C:\\Users\\Pablo\\Desktop\\Repositorios de ejercicios de clase\\Servicios\\ChatRoom\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Pablo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -51,8 +51,7 @@
           "net47",
           "net471",
           "net472",
-          "net48",
-          "net481"
+          "net48"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -61,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "6d20c450-ec3d-43ea-834e-9fa6bbf6ea4a": {
+      "ProjectGuid": "6d20c450-ec3d-43ea-834e-9fa6bbf6ea4a",
+      "DisplayName": "ChatRoom",
+      "ColorIndex": 0
+    },
+    "fb5918e9-a3cb-4afc-9bba-fd7673ed8ad0": {
+      "ProjectGuid": "fb5918e9-a3cb-4afc-9bba-fd7673ed8ad0",
+      "DisplayName": "ClienteChatRoom",
+      "ColorIndex": 1
+    },
+    "1506c985-856b-4c21-8b46-d44261fae29a": {
+      "ProjectGuid": "1506c985-856b-4c21-8b46-d44261fae29a",
+      "DisplayName": "UsuarioChatRoom",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
