@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatRoom", "ChatRoom.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsuarioChatRoom", "..\UsuarioChatRoom\UsuarioChatRoom.csproj", "{1506C985-856B-4C21-8B46-D44261FAE29A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteChat", "..\ClienteChat\ClienteChat.csproj", "{399C4E2F-61D6-4AF6-8EEB-F417A86F77C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1506C985-856B-4C21-8B46-D44261FAE29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1506C985-856B-4C21-8B46-D44261FAE29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1506C985-856B-4C21-8B46-D44261FAE29A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{399C4E2F-61D6-4AF6-8EEB-F417A86F77C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{399C4E2F-61D6-4AF6-8EEB-F417A86F77C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{399C4E2F-61D6-4AF6-8EEB-F417A86F77C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{399C4E2F-61D6-4AF6-8EEB-F417A86F77C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

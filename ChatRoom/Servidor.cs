@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -22,13 +23,17 @@ namespace ChatRoom
         {
             IP_SERVER = "127.0.0.1";
             socketSalaChat = new Socket[3];
-            puertosSalaChat = new int[] {42069,63000,6969}; //aqui tendria que hacer un math random? le asigno los valores a pelo a las salas...?
+            for (int i = 0; i < socketSalaChat.Length; i++)
+            {
+                socketSalaChat[i] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            }
+            puertosSalaChat = new int[] { 42069, 63000, 6969 }; //aqui tendria que hacer un math random? le asigno los valores a pelo a las salas...?
             //todo igual hacer que el numero de salas sea fijo, con los puertos fijos.....pero asi garantizas que sean siempre los mismos...?idk
             //igual hacer un archivo con los puertos que yo le pongo...y si no va coge el siguiente...asi hasta fin del archivo?
             //y que el cliente tmb acceda a esos archivos para entrar en la sala de chats...?
             //port = 42069;
             //backUpPort = 64000;
-            listaDeUsuarios = new List<Usuario>[3];          
+            listaDeUsuarios = new List<Usuario>[3];
         }
         public void IniciarChatRoom()
         {
@@ -37,32 +42,34 @@ namespace ChatRoom
             {
                 try
                 {
-                    socketSalaChat[numSala] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     IPEndPoint ep = new IPEndPoint(IPAddress.Any, puertosSalaChat[numSala]);
-                    //IPEndPoint ep = new IPEndPoint(IPAddress.Parse(IP_SERVER), port);
+                    //IPEndPoint ep = new IPEndPoint(IPAddress.Parse(IP_SERVER), puertosSalaChat[numSala]);
                     socketSalaChat[numSala].Bind(ep);
                     socketSalaChat[numSala].Listen(10);
                     listaDeUsuarios[numSala] = new List<Usuario>();
                     while (true)
                     {
-                        Console.WriteLine("conectense a " + puertosSalaChat[numSala]);
+                        Console.WriteLine("conectense a la sala "+numSala+" puerto " + puertosSalaChat[numSala]);
                         Socket sClient = socketSalaChat[numSala].Accept();
+                        string nombre;
                         using (NetworkStream ns = new NetworkStream(sClient))
                         using (StreamReader sr = new StreamReader(ns))
                         using (StreamWriter sw = new StreamWriter(ns))
                         {
                             sw.WriteLine("Introduce nombre usuario");
                             sw.Flush();
-                            string nombre = sr.ReadLine();
-                            Usuario user = new Usuario(sClient, nombre,numSala);
-                            Thread thread = new Thread(UserInChat);
-                            thread.Start(user);
+                            nombre = sr.ReadLine();
                         }
+                        Usuario user = new Usuario(sClient, nombre, numSala);
+                        listaDeUsuarios[numSala].Add(user);
+                        Console.WriteLine(user.nombre + "@" + user.ie.Address);
+                        Thread thread = new Thread(UserInChat);
+                        thread.Start(user);
                     }
                 }
                 catch (SocketException e) when ((e.ErrorCode == (int)SocketError.AddressNotAvailable) || e.ErrorCode == (int)SocketError.InvalidArgument || e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
                 {
-                    if (numSala<socketSalaChat.Length-1) numSala++;
+                    if (numSala < socketSalaChat.Length - 1) numSala++;
                     else keepTrying = false;
                 }
                 catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
@@ -87,15 +94,15 @@ namespace ChatRoom
         public void UserInChat(object user)
         {
             Usuario cliente = (Usuario)user;
-            listaDeUsuarios[cliente.numSala].Add(cliente);
-            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
-            {
-                usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala");
-            }
             using (cliente.ns = new NetworkStream(cliente.socket))
             using (cliente.sw = new StreamWriter(cliente.ns))
             using (cliente.sr = new StreamReader(cliente.ns))
             {
+                cliente.sw.AutoFlush = true;
+                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                {
+                    usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");                  
+                }
                 while (cliente.isConnected)
                 {
                     string? mensaje = cliente.sr.ReadLine();
@@ -117,7 +124,7 @@ namespace ChatRoom
                     {
                         foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
                         {
-                            if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                            if(usuario!=cliente)usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
                         }
                     }
                 }
