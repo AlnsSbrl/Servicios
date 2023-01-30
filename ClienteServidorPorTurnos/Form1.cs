@@ -36,7 +36,7 @@ namespace ClienteServidorPorTurnos
                 {
                     throw;
                 }
-            }        
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -58,26 +58,37 @@ namespace ClienteServidorPorTurnos
             }
             if (hasConnected)
             {
-                using (NetworkStream ns = new NetworkStream(sock))
-                using (StreamReader sr = new StreamReader(ns))
-                using (StreamWriter sw = new StreamWriter(ns))
+                try
                 {
-                    sw.AutoFlush = true;
-                    sw.WriteLine("user " + txbDNIUsuario.Text);
-                    label2.Text = sr.ReadLine();
-                    sw.WriteLine(((Button)sender).Tag.ToString().ToLower());
-                    respuestaServidor = sr.ReadLine();
-                    label2.Text = respuestaServidor;
-                    if ((Button)sender == btnList)
+                    using (NetworkStream ns = new NetworkStream(sock))
+                    using (StreamReader sr = new StreamReader(ns))
+                    using (StreamWriter sw = new StreamWriter(ns))
                     {
-                        listAlumnos.Items.Clear();
-                        do
+                        sw.AutoFlush = true;
+                        sw.WriteLine("user " + txbDNIUsuario.Text);
+                        string msg = sr.ReadLine();
+                        label2.Text = msg;
+                        if (msg != "ERROR02" && msg != "ERROR01")
                         {
-                            string? alumno = sr.ReadLine();
-                            if (alumno == null) break;
-                            listAlumnos.Items.Add(alumno);
-                        } while (true);
+                            sw.WriteLine(((Button)sender).Tag.ToString().ToLower());
+                            respuestaServidor = sr.ReadLine();
+                            label2.Text = respuestaServidor;
+                            if ((Button)sender == btnList)
+                            {
+                                listAlumnos.Items.Clear();
+                                do
+                                {
+                                    string? alumno = sr.ReadLine();
+                                    if (alumno == null) break;
+                                    listAlumnos.Items.Add(alumno);
+                                } while (true);
+                            }
+                        }
                     }
+                }
+                catch (IOException)
+                {
+                    label2.Text = "Error";
                 }
                 sock.Close();
             }
@@ -94,7 +105,7 @@ namespace ClienteServidorPorTurnos
         {
             FormConexion f = new FormConexion(ip, port);
             f.ShowDialog();
-            if (f.DialogResult == DialogResult.OK && f.ip.ToString()=="0" && f.port != 0)
+            if (f.DialogResult == DialogResult.OK && f.ip.ToString() == "0" && f.port != 0)
             {
                 ip = f.ip.ToString();
                 port = (int)f.port;
