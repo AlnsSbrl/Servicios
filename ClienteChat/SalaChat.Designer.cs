@@ -30,11 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SalaChat));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.listBoxMensajes = new System.Windows.Forms.ListBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnList = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.listBoxMensajes = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -46,6 +46,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 339);
             this.panel1.TabIndex = 0;
+            // 
+            // listBoxMensajes
+            // 
+            this.listBoxMensajes.FormattingEnabled = true;
+            this.listBoxMensajes.ItemHeight = 15;
+            this.listBoxMensajes.Location = new System.Drawing.Point(0, 14);
+            this.listBoxMensajes.Name = "listBoxMensajes";
+            this.listBoxMensajes.Size = new System.Drawing.Size(290, 319);
+            this.listBoxMensajes.TabIndex = 0;
             // 
             // textBox1
             // 
@@ -60,8 +69,10 @@
             this.btnList.Name = "btnList";
             this.btnList.Size = new System.Drawing.Size(75, 48);
             this.btnList.TabIndex = 2;
+            this.btnList.Tag = "#lista";
             this.btnList.Text = "Personas en la sala";
             this.btnList.UseVisualStyleBackColor = true;
+            this.btnList.Click += new System.EventHandler(this.btnList_Click);
             // 
             // btnExit
             // 
@@ -69,6 +80,7 @@
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 46);
             this.btnExit.TabIndex = 3;
+            this.btnExit.Tag = "#exit";
             this.btnExit.Text = "Salir del grupo";
             this.btnExit.UseVisualStyleBackColor = true;
             // 
@@ -81,15 +93,6 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // listBoxMensajes
-            // 
-            this.listBoxMensajes.FormattingEnabled = true;
-            this.listBoxMensajes.ItemHeight = 15;
-            this.listBoxMensajes.Location = new System.Drawing.Point(0, 14);
-            this.listBoxMensajes.Name = "listBoxMensajes";
-            this.listBoxMensajes.Size = new System.Drawing.Size(290, 319);
-            this.listBoxMensajes.TabIndex = 0;
             // 
             // SalaChat
             // 

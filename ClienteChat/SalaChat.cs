@@ -70,5 +70,22 @@ namespace ClienteChat
                 }
             }
         }
+
+        private void btnList_Click(object sender, EventArgs e)
+        {
+            using(usuario.sw = new StreamWriter(usuario.ns))
+            {
+                usuario.sw.WriteLine(((Button)sender).Tag.ToString());
+            }
+            if ((Button)sender == btnList)
+            {
+                //showDialog con la lista??
+            }
+            else
+            {
+
+                DialogResult = DialogResult.OK;
+            }
+        }
     }
 }
