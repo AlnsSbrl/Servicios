@@ -49,22 +49,36 @@ namespace ChatRoom
                     listaDeUsuarios[numSala] = new List<Usuario>();
                     while (true)
                     {
-                        Console.WriteLine("conectense a la sala "+numSala+" puerto " + puertosSalaChat[numSala]);
+                        Console.WriteLine("conectense a la sala " + numSala + " puerto " + puertosSalaChat[numSala]);
                         Socket sClient = socketSalaChat[numSala].Accept();
-                        string nombre;
+                        string? nombre;
                         using (NetworkStream ns = new NetworkStream(sClient))
                         using (StreamReader sr = new StreamReader(ns))
                         using (StreamWriter sw = new StreamWriter(ns))
                         {
-                            sw.WriteLine("Introduce nombre usuario");
-                            sw.Flush();
-                            nombre = sr.ReadLine();
+                            do
+                            {
+                                sw.WriteLine("Introduce nombre usuario");
+                                sw.Flush();
+                                nombre = sr.ReadLine();
+                                if (nombre == "")
+                                {
+                                    sw.WriteLine("Es necesario un nombre de usuario");
+                                }
+                                else if (nombre.Contains("@"))
+                                {
+                                    sw.WriteLine("No se permiten '@' en el nombre de usuario");
+                                }
+                            } while (nombre == "" || nombre.Contains("@"));
                         }
-                        Usuario user = new Usuario(sClient, nombre, numSala);
-                        listaDeUsuarios[numSala].Add(user);
-                        Console.WriteLine(user.nombre + "@" + user.ie.Address);
-                        Thread thread = new Thread(UserInChat);
-                        thread.Start(user);
+                        if (nombre != null)
+                        {
+                            Usuario user = new Usuario(sClient, nombre, numSala);
+                            listaDeUsuarios[numSala].Add(user);
+                            Console.WriteLine(user.nombre + "@" + user.ie.Address);
+                            Thread thread = new Thread(UserInChat);
+                            thread.Start(user);
+                        }
                     }
                 }
                 catch (SocketException e) when ((e.ErrorCode == (int)SocketError.AddressNotAvailable) || e.ErrorCode == (int)SocketError.InvalidArgument || e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
@@ -101,7 +115,7 @@ namespace ChatRoom
                 cliente.sw.AutoFlush = true;
                 foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
                 {
-                    usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");                  
+                    usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
                 }
                 while (cliente.isConnected)
                 {
@@ -124,7 +138,7 @@ namespace ChatRoom
                     {
                         foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
                         {
-                            if(usuario!=cliente)usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                            if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
                         }
                     }
                 }
