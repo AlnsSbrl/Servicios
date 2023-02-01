@@ -16,7 +16,7 @@ namespace ClienteChat
         {
             InitializeComponent();
             Icon = Properties.Resources.telegram_icon_icons_com_72055;
-
+            permiteAccesoASalas(false);
             for (int i = 0; i < socket.Length; i++)
             {
                 socket[i] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -46,6 +46,24 @@ namespace ClienteChat
                 }
             } while (!isConnected);
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if(textBox1.Text == "" || textBox1.Text.Contains("@"))
+            {
+                permiteAccesoASalas(false);
+            }
+            else
+            {
+                permiteAccesoASalas(true);
+            }
+        }
+        private void permiteAccesoASalas(bool isPermitted)
+        {
+            btnSala1.Enabled = isPermitted;
+            btnSala2.Enabled = isPermitted;
+            btnSalaHorny.Enabled = isPermitted;
         }
     }
 }
