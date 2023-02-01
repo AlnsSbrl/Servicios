@@ -73,13 +73,15 @@ namespace ClienteServidorPorTurnos
                             sw.WriteLine(((Button)sender).Tag.ToString().ToLower());
                             respuestaServidor = sr.ReadLine();
                             label2.Text = respuestaServidor;
-                            if ((Button)sender == btnList)
+                            if (sender == btnList)
                             {
                                 listAlumnos.Items.Clear();
                                 do
                                 {
                                     string? alumno = sr.ReadLine();
+
                                     if (alumno == null) break;
+
                                     listAlumnos.Items.Add(alumno);
                                 } while (true);
                             }
