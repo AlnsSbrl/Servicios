@@ -15,7 +15,7 @@ namespace ChatRoom
         Socket[] socketSalaChat;
         int[] puertosSalaChat;
         List<Usuario>[] listaDeUsuarios;
-        //realmente esas 3 propiedades son arrays del mismo tamaño, para cada sala......-> podria ponerlas en la misma clase i guess
+        //realmente esas 3 propiedades son arrays del mismo tamaño, para cada sala......-> podria ponerlas en la misma clase I guess
         string IP_SERVER;
         bool keepTrying = true;
 
@@ -27,7 +27,7 @@ namespace ChatRoom
             {
                 socketSalaChat[i] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
-            puertosSalaChat = new int[] { 42069, 63000, 6969 }; //aqui tendria que hacer un math random? le asigno los valores a pelo a las salas...?
+            puertosSalaChat = new int[] { 42069, 63000, 64000 }; //aqui tendria que hacer un math random? le asigno los valores a pelo a las salas...?
             //todo igual hacer que el numero de salas sea fijo, con los puertos fijos.....pero asi garantizas que sean siempre los mismos...?idk
             //igual hacer un archivo con los puertos que yo le pongo...y si no va coge el siguiente...asi hasta fin del archivo?
             //y que el cliente tmb acceda a esos archivos para entrar en la sala de chats...?
@@ -97,7 +97,7 @@ namespace ChatRoom
 
         public string MuestraLista(int numSala)
         {
-            string res = "Lista de usuarios conectados:";
+            string res = "Lista de personas en la sala:";//"Lista de usuarios conectados:";
             foreach (Usuario usuario in listaDeUsuarios[numSala])
             {
                 res += "\n\r" + usuario.nombre + "@" + usuario.ie.Address;
@@ -131,8 +131,9 @@ namespace ChatRoom
                         if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
                     }
                     else if (mensaje == "#lista")
-                    {
+                    {                       
                         cliente.sw.WriteLine(MuestraLista(cliente.numSala));
+                        cliente.sw.WriteLine("Fin de la lista");                        
                     }
                     else
                     {

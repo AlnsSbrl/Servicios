@@ -1,0 +1,6 @@
+C:\Users\Pablo\Desktop\Servicios\Mensaje\bin\Debug\Mensaje.dll
+C:\Users\Pablo\Desktop\Servicios\Mensaje\bin\Debug\Mensaje.pdb
+C:\Users\Pablo\Desktop\Servicios\Mensaje\obj\Debug\Mensaje.csproj.AssemblyReference.cache
+C:\Users\Pablo\Desktop\Servicios\Mensaje\obj\Debug\Mensaje.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\Servicios\Mensaje\obj\Debug\Mensaje.dll
+C:\Users\Pablo\Desktop\Servicios\Mensaje\obj\Debug\Mensaje.pdb
