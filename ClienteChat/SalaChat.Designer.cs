@@ -120,12 +120,10 @@
             this.Controls.Add(this.panel1);
             this.Name = "SalaChat";
             this.Text = "SalaChat";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SalaChat_FormClosed);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

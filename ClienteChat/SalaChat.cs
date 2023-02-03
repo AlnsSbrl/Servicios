@@ -156,10 +156,5 @@ namespace ClienteChat
                 pictureBox1_Click(pictureBox1, e);
             }
         }
-
-        private void SalaChat_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            //usuario.socket.Close();
-        }
     }
 }
