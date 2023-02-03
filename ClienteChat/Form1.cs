@@ -8,14 +8,17 @@ namespace ClienteChat
     public partial class Form1 : Form
     {
         Socket[] socket = new Socket[3];
-        int[] port = new int[3] {42069,63000,6969};
-        string ip="127.0.0.1";
-        string nombreUsuario="";
+        int[] port = new int[3] { 42069, 63000, 6969 };
+        bool[] hardDisable = new bool[3] { true, true, true };
+
+        string ip = "127.0.0.1";
+        //string nombreUsuario;//="";
 
         public Form1()
         {
             InitializeComponent();
             Icon = Properties.Resources.telegram_icon_icons_com_72055;
+            Text = "Tele miligram";
             permiteAccesoASalas(false);
             for (int i = 0; i < socket.Length; i++)
             {
@@ -31,16 +34,18 @@ namespace ClienteChat
             {
                 try
                 {
-                    int port=0;
-                    int.TryParse( ((Button)sender).Tag.ToString(), out port);
-                    IPEndPoint ie = new IPEndPoint(IPAddress.Parse(ip),port);
-                    socket[i].Connect(ie); //en verdad NO dará problema de conexion......unlucky
-                    Usuario user = new Usuario(socket[i],textBox1.Text,i);
+                    int port = 0;
+                    int.TryParse(((Button)sender).Tag.ToString(), out port);
+                    IPEndPoint ie = new IPEndPoint(IPAddress.Parse(ip), port);
+                    socket[i].Connect(ie); //claro, habrá que cerrarla no??
+                    Usuario user = new Usuario(socket[i], textBox1.Text, i);
                     isConnected = true;
                     SalaChat formSala = new SalaChat(user);
                     formSala.Show();
+                    hardDisable[i] = false;
+                    permiteAccesoASalas(true);
                 }
-                catch (SocketException ex) when (ex.ErrorCode == (int)SocketError.AddressAlreadyInUse)
+                catch (SocketException ex) when (ex.ErrorCode == (int)SocketError.AddressAlreadyInUse || (ex.ErrorCode == (int)SocketError.IsConnected))
                 {
                     if (i < socket.Length) i++;
                 }
@@ -50,7 +55,7 @@ namespace ClienteChat
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if(textBox1.Text == "" || textBox1.Text.Contains("@"))
+            if (textBox1.Text == "" || textBox1.Text.Contains("@"))
             {
                 permiteAccesoASalas(false);
             }
@@ -61,9 +66,28 @@ namespace ClienteChat
         }
         private void permiteAccesoASalas(bool isPermitted)
         {
-            btnSala1.Enabled = isPermitted;
-            btnSala2.Enabled = isPermitted;
-            btnSalaHorny.Enabled = isPermitted;
+            btnSala0.Enabled = isPermitted && hardDisable[0];
+            btnSala1.Enabled = isPermitted && hardDisable[1];
+            btnSala2.Enabled = isPermitted && hardDisable[2];
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            for (int i = 0; i < socket.Length; i++)
+            {
+                if (socket[i].IsBound)
+                {
+                    try
+                    {
+
+                        socket[i].Close();
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+            }
         }
     }
 }

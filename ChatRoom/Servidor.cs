@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace ChatRoom
 {
-
     internal class Servidor
     {
         Socket[] socketSalaChat;
@@ -42,8 +41,8 @@ namespace ChatRoom
             {
                 try
                 {
-                    IPEndPoint ep = new IPEndPoint(IPAddress.Any, puertosSalaChat[numSala]);
-                    //IPEndPoint ep = new IPEndPoint(IPAddress.Parse(IP_SERVER), puertosSalaChat[numSala]);
+                    //IPEndPoint ep = new IPEndPoint(IPAddress.Any, puertosSalaChat[numSala]);
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(IP_SERVER), puertosSalaChat[numSala]);
                     socketSalaChat[numSala].Bind(ep);
                     socketSalaChat[numSala].Listen(10);
                     listaDeUsuarios[numSala] = new List<Usuario>();
@@ -88,7 +87,7 @@ namespace ChatRoom
                 }
                 catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
                 {
-                    Console.WriteLine("Sala vacía, apagando...");
+                    Console.WriteLine($"Sala {numSala} vacía, se procede a cerrarla...");
                     keepTrying = false;
                     //esto por poner algo para cerrarlo y no tener todo el tiempo un while true
                 }
@@ -97,7 +96,7 @@ namespace ChatRoom
 
         public string MuestraLista(int numSala)
         {
-            string res = "Lista de personas en la sala:";//"Lista de usuarios conectados:";
+            string res = "Lista de personas en la sala:";
             foreach (Usuario usuario in listaDeUsuarios[numSala])
             {
                 res += "\n\r" + usuario.nombre + "@" + usuario.ie.Address;
@@ -108,41 +107,52 @@ namespace ChatRoom
         public void UserInChat(object user)
         {
             Usuario cliente = (Usuario)user;
-            using (cliente.ns = new NetworkStream(cliente.socket))
-            using (cliente.sw = new StreamWriter(cliente.ns))
-            using (cliente.sr = new StreamReader(cliente.ns))
+            try
             {
-                cliente.sw.AutoFlush = true;
-                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                using (cliente.ns = new NetworkStream(cliente.socket))//me petaba aqui porque el cliente CERRABA el socket
+                using (cliente.sw = new StreamWriter(cliente.ns))
+                using (cliente.sr = new StreamReader(cliente.ns))
                 {
-                    usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
+                    cliente.sw.AutoFlush = true;
+                    foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                    {
+                        usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
+                    }
+                    while (cliente.isConnected)
+                    {
+                        string? mensaje = cliente.sr.ReadLine();
+                        if (mensaje == "#exit" || mensaje == null)
+                        {
+                            cliente.isConnected = false;
+                            listaDeUsuarios[cliente.numSala].Remove(cliente); //tecnicamente entonces no me lo hace??
+                            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                            {
+                                usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
+                            }
+                            if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
+                        }
+                        else if (mensaje == "#lista")
+                        {
+                            cliente.sw.WriteLine(MuestraLista(cliente.numSala));
+                            cliente.sw.WriteLine("Fin de la lista");
+                        }
+                        else
+                        {
+                            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                            {
+                                if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                            }
+                        }
+                    }
                 }
-                while (cliente.isConnected)
+            }
+            catch (IOException)
+            {
+                listaDeUsuarios[cliente.numSala].Remove(cliente);
+                foreach (Usuario usr in listaDeUsuarios[cliente.numSala])
                 {
-                    string? mensaje = cliente.sr.ReadLine();
-                    if (mensaje == "#exit" || mensaje == null)
-                    {
-                        cliente.isConnected = false;
-                        foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
-                        {
-                            usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
-                        }
-                        listaDeUsuarios[cliente.numSala].Remove(cliente);
-                        if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
-                    }
-                    else if (mensaje == "#lista")
-                    {                       
-                        cliente.sw.WriteLine(MuestraLista(cliente.numSala));
-                        cliente.sw.WriteLine("Fin de la lista");                        
-                    }
-                    else
-                    {
-                        foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
-                        {
-                            if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
-                        }
-                    }
-                }
+                    usr.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} tried to swim in lava");
+                }//no me convence esta solucion...pero da el apaño
             }
         }
     }

@@ -35,6 +35,7 @@
             this.btnList = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.txbListaUsuarios = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +67,7 @@
             // 
             // btnList
             // 
-            this.btnList.Location = new System.Drawing.Point(350, 276);
+            this.btnList.Location = new System.Drawing.Point(383, 276);
             this.btnList.Name = "btnList";
             this.btnList.Size = new System.Drawing.Size(75, 48);
             this.btnList.TabIndex = 2;
@@ -77,13 +78,14 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(350, 346);
+            this.btnExit.Location = new System.Drawing.Point(383, 346);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 46);
             this.btnExit.TabIndex = 3;
             this.btnExit.Tag = "#exit";
             this.btnExit.Text = "Salir del grupo";
             this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnList_Click);
             // 
             // pictureBox1
             // 
@@ -95,11 +97,22 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // txbListaUsuarios
+            // 
+            this.txbListaUsuarios.Enabled = false;
+            this.txbListaUsuarios.Location = new System.Drawing.Point(340, 67);
+            this.txbListaUsuarios.Multiline = true;
+            this.txbListaUsuarios.Name = "txbListaUsuarios";
+            this.txbListaUsuarios.Size = new System.Drawing.Size(160, 179);
+            this.txbListaUsuarios.TabIndex = 5;
+            this.txbListaUsuarios.Visible = false;
+            // 
             // SalaChat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 450);
+            this.ClientSize = new System.Drawing.Size(512, 450);
+            this.Controls.Add(this.txbListaUsuarios);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnList);
@@ -107,6 +120,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "SalaChat";
             this.Text = "SalaChat";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SalaChat_FormClosed);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -122,5 +136,6 @@
         private Button btnExit;
         private ListBox listBoxMensajes;
         private PictureBox pictureBox1;
+        private TextBox txbListaUsuarios;
     }
 }

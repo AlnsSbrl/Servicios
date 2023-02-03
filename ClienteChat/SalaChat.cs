@@ -12,16 +12,18 @@ using System.Windows.Forms;
 
 namespace ClienteChat
 {
+
     public partial class SalaChat : Form
     {
         Usuario usuario;
-        private readonly object l = new object();
-        bool haceComando = false;
-        string mensajeComando = "";
+        bool muestraLista = false;
+        bool salir = false;
         public SalaChat(object user)
         {
             InitializeComponent();
             usuario = (Usuario)user;
+            Icon = Properties.Resources.telegram_icon_icons_com_72055;
+            Text = "Sala " + usuario.numSala;
             pictureBox1.Image = Properties.Resources.ic_send_128_28719;
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             using (usuario.ns = new NetworkStream(usuario.socket))
@@ -34,52 +36,82 @@ namespace ClienteChat
             }
             Thread hiloLeer = new Thread(LeeMensajes);
             hiloLeer.Start();
+            hiloLeer.IsBackground = true;
         }
         public void LeeMensajes()
         {
             while (usuario.isConnected)
             {
-                //lock (l) WOW TENIA MAL PUESTO ESO ME MEO
+                try
+                {
                     using (usuario.ns = new NetworkStream(usuario.socket))
                     using (usuario.sr = new StreamReader(usuario.ns))
                     {
+                        string msg = usuario.sr.ReadLine();
+                        if (muestraLista)
                         {
-                            if (haceComando)
+                            borraLista();
+                            while (muestraLista)
                             {
-                                //todo list, exit
-                                haceComando = false;
-                            }
-                            else
-                            {
-                                string? msg = usuario.sr.ReadLine();
-                                if (msg != null)
-                                {
-                                    cambiaLosMensajes(msg, true);
-                                }
+                                updateUsuarios(msg);
+                                msg = usuario.sr.ReadLine();
+                                if (msg == "Fin de la lista") muestraLista = false;
                             }
                         }
+                        else if (salir)
+                        {
+                            Close();
+                        }
+                        else
+                        {
+                            cambiaLosMensajes(msg, true);
+                        }
                     }
+                }
+                catch (IOException)
+                {
+                    Console.WriteLine("ups");
+                }
             }
+        }
+
+
+        private void borraLista()
+        {
+            Invoke(new MethodInvoker(delegate ()
+            {
+                txbListaUsuarios.Text = "";
+            }));
         }
         private void cambiaLosMensajes(string msg, bool posIzq)
         {
             Invoke(new MethodInvoker(delegate ()
             {
-                listBoxMensajes.Items.Add(posIzq?""+msg:"\t"+msg);
-                //esto "tira", pero no me displayea los mensajes como a mi me gustaría
+                //ms bruhhh no me deja colocar mi propio componente T_T
+                /*la idea era en un panel ir poniendo el componente mensaje, que separa el nombre del usuario del mensaje
+                 y los coloca de manera más vistosa (mensajes del usuario a la derecha, mensajes del resto a la derecha),
+                igual añadir evento on click para responder a ese mensaje...endless ideas*/
+                listBoxMensajes.Items.Add(posIzq ? "" + msg : "\t" + msg);
                 if (listBoxMensajes.Items.Count > 10) listBoxMensajes.Items.RemoveAt(0);
-
             }));
         }
 
+        private void updateUsuarios(string usuario)
+        {
+            Invoke(new MethodInvoker(delegate ()
+            {
+                txbListaUsuarios.Text += usuario + "\n";
+            }));
+        }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            //lock (l)
+            if (textBox1.Text != "")
             {
-                if (textBox1.Text != "")
+                try
                 {
+
                     using (usuario.ns = new NetworkStream(usuario.socket))
-                    using (usuario.sw = new StreamWriter(usuario.ns))                
+                    using (usuario.sw = new StreamWriter(usuario.ns))
                     {
                         usuario.sw.WriteLine(textBox1.Text);
                         usuario.sw.Flush();
@@ -88,37 +120,46 @@ namespace ClienteChat
                         textBox1.Text = "";
                     }
                 }
+                catch (IOException)
+                {
+                    Console.WriteLine("woops");
+                }
             }
         }
 
         private void btnList_Click(object sender, EventArgs e)
         {
-            //lock (l)
+            txbListaUsuarios.Visible = true;
+            if (sender == btnList) muestraLista = true;
+            else salir = true;
+            try
             {
-                haceComando = true;
+
+                using (usuario.ns = new NetworkStream(usuario.socket))
                 using (usuario.sw = new StreamWriter(usuario.ns))
                 {
-                    mensajeComando = ((Button)sender).Tag.ToString();
-                    usuario.sw.WriteLine(((Button)sender).Tag.ToString()); //?
+                    usuario.sw.WriteLine(((Button)sender).Tag.ToString());
                     usuario.sw.Flush();
                 }
-                if ((Button)sender == btnList)
-                {
-                    //showDialog con la lista??
-                }
-                else
-                {
-                    DialogResult = DialogResult.OK;
-                }
             }
+            catch (IOException)
+            {
+                Console.WriteLine("algo pasa mm");
+            }
+            if (salir) Close();
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                pictureBox1_Click(pictureBox1, e); //este evento......funcionaria? lmao
+                pictureBox1_Click(pictureBox1, e);
             }
+        }
+
+        private void SalaChat_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //usuario.socket.Close();
         }
     }
 }
