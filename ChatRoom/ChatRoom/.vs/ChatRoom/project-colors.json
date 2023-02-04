@@ -1,0 +1,31 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "6d20c450-ec3d-43ea-834e-9fa6bbf6ea4a": {
+      "ProjectGuid": "6d20c450-ec3d-43ea-834e-9fa6bbf6ea4a",
+      "DisplayName": "ChatRoom",
+      "ColorIndex": 0
+    },
+    "fb5918e9-a3cb-4afc-9bba-fd7673ed8ad0": {
+      "ProjectGuid": "fb5918e9-a3cb-4afc-9bba-fd7673ed8ad0",
+      "DisplayName": "ClienteChatRoom",
+      "ColorIndex": 1
+    },
+    "1506c985-856b-4c21-8b46-d44261fae29a": {
+      "ProjectGuid": "1506c985-856b-4c21-8b46-d44261fae29a",
+      "DisplayName": "UsuarioChatRoom",
+      "ColorIndex": 2
+    },
+    "399c4e2f-61d6-4af6-8eeb-f417a86f77c1": {
+      "ProjectGuid": "399c4e2f-61d6-4af6-8eeb-f417a86f77c1",
+      "DisplayName": "ClienteChat",
+      "ColorIndex": 3
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Archivos varios",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 4
+}
