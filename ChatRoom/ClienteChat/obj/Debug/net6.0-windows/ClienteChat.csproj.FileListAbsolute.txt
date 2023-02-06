@@ -56,3 +56,22 @@ C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\pruebaChatR
 C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\pruebaChatRoom\ClienteChat\obj\Debug\net6.0-windows\ref\ClienteChat.dll
 C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\pruebaChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.pdb
 C:\Users\Pablo\Desktop\Repositorios de ejercicios de clase\Servicios\pruebaChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.genruntimeconfig.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\bin\Debug\net6.0-windows\ClienteChat.exe
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\bin\Debug\net6.0-windows\ClienteChat.deps.json
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\bin\Debug\net6.0-windows\ClienteChat.runtimeconfig.json
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\bin\Debug\net6.0-windows\ClienteChat.dll
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\bin\Debug\net6.0-windows\ClienteChat.pdb
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.csproj.AssemblyReference.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.Form1.resources
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.Properties.Resources.resources
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.SalaChat.resources
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.csproj.GenerateResource.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.AssemblyInfoInputs.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.AssemblyInfo.cs
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.dll
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\refint\ClienteChat.dll
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.pdb
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ClienteChat.genruntimeconfig.cache
+C:\Users\Pablo\Desktop\Servicios\ChatRoom\ClienteChat\obj\Debug\net6.0-windows\ref\ClienteChat.dll

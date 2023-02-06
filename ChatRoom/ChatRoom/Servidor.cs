@@ -42,36 +42,9 @@ namespace ChatRoom
                     {
                         Console.WriteLine("conectense a la sala " + numSala + " puerto " + puertosSalaChat[numSala]);
                         Socket sClient = socketSalaChat[numSala].Accept();
-                        string? nombre;
-                        using (NetworkStream ns = new NetworkStream(sClient))
-                        using (StreamReader sr = new StreamReader(ns))
-                        using (StreamWriter sw = new StreamWriter(ns))
-                        {
-                            do
-                            {
-                                sw.WriteLine("Introduce nombre usuario");
-                                sw.Flush();
-                                nombre = sr.ReadLine();
-                                if (nombre == "")
-                                {
-                                    sw.WriteLine("Es necesario un nombre de usuario");
-                                    sw.Flush();
-                                }
-                                else if (nombre.Contains("@"))
-                                {
-                                    sw.WriteLine("No se permiten '@' en el nombre de usuario");
-                                    sw.Flush();
-                                }
-                            } while (nombre == "" || nombre.Contains("@"));
-                        }
-                        if (nombre != null)
-                        {
-                            Usuario user = new Usuario(sClient, nombre, numSala);
-                            listaDeUsuarios[numSala].Add(user);
-                            Console.WriteLine(user.nombre + "@" + user.ie.Address);
-                            Thread thread = new Thread(UserInChat);
-                            thread.Start(user);
-                        }
+                        SocketSala soc = new SocketSala(sClient, numSala);
+                        Thread thread = new Thread(UserInChat);
+                        thread.Start(soc);
                     }
                 }
                 catch (SocketException e) when ((e.ErrorCode == (int)SocketError.AddressNotAvailable) || e.ErrorCode == (int)SocketError.InvalidArgument || e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
@@ -98,55 +71,89 @@ namespace ChatRoom
             return res;
         }
 
-        public void UserInChat(object user)
+        public void UserInChat(object socketSala)
         {
-            Usuario cliente = (Usuario)user;
-            try
-            {
-                using (cliente.ns = new NetworkStream(cliente.socket))//me petaba aqui porque el cliente CERRABA el socket
-                using (cliente.sw = new StreamWriter(cliente.ns))
-                using (cliente.sr = new StreamReader(cliente.ns))
+            SocketSala socSala = (SocketSala)socketSala;
+            string? nombre;
+            using (NetworkStream ns = new NetworkStream(socSala.socket))
+            using (StreamReader sr = new StreamReader(ns))
+            using (StreamWriter sw = new StreamWriter(ns))
+                do
                 {
-                    cliente.sw.AutoFlush = true;
-                    foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                    sw.WriteLine("Introduce nombre usuario");
+                    sw.Flush();
+                    nombre = sr.ReadLine();
+                    if (nombre != null)
                     {
-                        usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
-                    }
-                    while (cliente.isConnected)
-                    {
-                        string? mensaje = cliente.sr.ReadLine();
-                        if (mensaje == "#exit" || mensaje == null)
+                        if (nombre == "")
                         {
-                            cliente.isConnected = false;
-                            listaDeUsuarios[cliente.numSala].Remove(cliente);
-                            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
-                            {
-                                usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
-                            }
-                            if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
+                            sw.WriteLine("Es necesario un nombre de usuario");
+                            sw.Flush();
                         }
-                        else if (mensaje == "#lista")
+                        else if (nombre.Contains("@"))
                         {
-                            cliente.sw.WriteLine(MuestraLista(cliente.numSala));
-                            cliente.sw.WriteLine("Fin de la lista");
-                        }
-                        else
-                        {
-                            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
-                            {
-                                if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
-                            }
+                            sw.WriteLine("No se permiten '@' en el nombre de usuario");
+                            sw.Flush();
                         }
                     }
-                    cliente.socket.Close();
+                    else
+                    {
+                        break;
+                    }
+                } while (nombre == "" || nombre.Contains("@"));
+
+            if (nombre != null)
+            {
+                Usuario cliente = new Usuario(socSala.socket, nombre, socSala.sala);
+                listaDeUsuarios[socSala.sala].Add(cliente);
+                Console.WriteLine(cliente.nombre + "@" + cliente.ie.Address);
+                try
+                {
+                    using (cliente.ns = new NetworkStream(cliente.socket))//me petaba aqui porque el cliente CERRABA el socket
+                    using (cliente.sw = new StreamWriter(cliente.ns))
+                    using (cliente.sr = new StreamReader(cliente.ns))
+                    {
+                        cliente.sw.AutoFlush = true;
+                        foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                        {
+                            usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
+                        }
+                        while (cliente.isConnected)
+                        {
+                            string? mensaje = cliente.sr.ReadLine();
+                            if (mensaje == "#exit" || mensaje == null)
+                            {
+                                cliente.isConnected = false;
+                                listaDeUsuarios[cliente.numSala].Remove(cliente);
+                                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                {
+                                    usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
+                                }
+                                if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
+                            }
+                            else if (mensaje == "#lista")
+                            {
+                                cliente.sw.WriteLine(MuestraLista(cliente.numSala));
+                                cliente.sw.WriteLine("Fin de la lista");
+                            }
+                            else
+                            {
+                                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                {
+                                    if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                                }
+                            }
+                        }
+                        cliente.socket.Close();
+                    }
                 }
-            }
-            catch (IOException)
-            {
-                listaDeUsuarios[cliente.numSala].Remove(cliente);
-                foreach (Usuario usr in listaDeUsuarios[cliente.numSala])
+                catch (IOException)
                 {
-                    usr.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} tried to swim in lava");
+                    listaDeUsuarios[cliente.numSala].Remove(cliente);
+                    foreach (Usuario usr in listaDeUsuarios[cliente.numSala])
+                    {
+                        usr.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} tried to swim in lava");
+                    }
                 }
             }
         }
