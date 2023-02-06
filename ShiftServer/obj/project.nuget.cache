@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OfyKNcDCHn/oXm94bpIT7zIQjOYNTqtleXuZs10gon8knhasGyYZPaF1iUwfD61/2zN+0M2LaMYmMUU1C8FJvw==",
+  "dgSpecHash": "neU3jZhCxKTr2VCMoJD4WuQE2kWryo30y5LgjAQgSHLjeqNFzGQgLHRIcYaYlXxpsXr3ZoEWVxRpOlwKafxcow==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ShiftServer\\ShiftServer.csproj",
+  "projectFilePath": "C:\\Users\\Pablo\\Desktop\\Servicios\\ShiftServer\\ShiftServer.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

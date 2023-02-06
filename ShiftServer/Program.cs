@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ShiftServer serv = new ShiftServer();
+            serv.Init();
         }
     }
 }

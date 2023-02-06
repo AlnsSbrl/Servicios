@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ShiftServer\\ShiftServer.csproj",
+      "projectUniqueName": "C:\\Users\\Pablo\\Desktop\\Servicios\\ShiftServer\\ShiftServer.csproj",
       "projectName": "ShiftServer",
-      "projectPath": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ShiftServer\\ShiftServer.csproj",
+      "projectPath": "C:\\Users\\Pablo\\Desktop\\Servicios\\ShiftServer\\ShiftServer.csproj",
       "packagesPath": "C:\\Users\\Pablo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pablo\\Desktop\\Proyectos Csharp\\Servicios\\ShiftServer\\obj\\",
+      "outputPath": "C:\\Users\\Pablo\\Desktop\\Servicios\\ShiftServer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Pablo\\AppData\\Roaming\\NuGet\\NuGet.Config",
