@@ -1,0 +1,11 @@
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\bin\Debug\ClienteAdivino.exe.config
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\bin\Debug\ClienteAdivino.exe
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\bin\Debug\ClienteAdivino.pdb
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.csproj.AssemblyReference.cache
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.csproj.SuggestedBindingRedirects.cache
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.Form1.resources
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.Properties.Resources.resources
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.csproj.GenerateResource.cache
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.exe
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.pdb
