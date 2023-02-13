@@ -165,6 +165,7 @@ namespace ClienteChat
                     usuario.sw.WriteLine("#exit");
                     usuario.sw.Flush();
                 }
+                //usuario.socket.Close();
             }
             catch (IOException)
             {

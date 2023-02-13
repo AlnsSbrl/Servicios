@@ -35,15 +35,15 @@ namespace ClienteChat
                 //int port = 0;
                 //int.TryParse(((Button)sender).Tag.ToString(), out port);
                 //y si hago mi propio boton con su indice...
-
+                socket[i]= new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint ie = new IPEndPoint(IPAddress.Parse(ip), port[i]);
                 socket[i].Connect(ie); //claro, habrá que cerrarla no??
                 Usuario user = new Usuario(socket[i], textBox1.Text, i);
                 //isConnected = true;
                 SalaChat formSala = new SalaChat(user);
                 formSala.Show();
-                hardDisable[i] = false;
-                permiteAccesoASalas(true);
+                //hardDisable[i] = false;
+                //permiteAccesoASalas(true);
             }
             catch (SocketException ex) when (ex.ErrorCode == (int)SocketError.AddressAlreadyInUse || (ex.ErrorCode == (int)SocketError.IsConnected))
             {
@@ -84,7 +84,6 @@ namespace ClienteChat
                 {
                     try
                     {
-
                         socket[i].Close();
                     }
                     catch (IOException)

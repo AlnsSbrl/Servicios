@@ -11,6 +11,7 @@ namespace ChatRoom
 {
     internal class Servidor
     {
+        private readonly object l = new object();
         Socket[] socketSalaChat;
         int[] puertosSalaChat;
         List<Usuario>[] listaDeUsuarios;
@@ -54,8 +55,8 @@ namespace ChatRoom
                 }
                 catch (SocketException e) when (e.ErrorCode == (int)SocketError.Interrupted)
                 {
-                    Console.WriteLine($"Sala {numSala} vacía, se procede a cerrarla...");
-                    keepTrying = false;
+                    //Console.WriteLine($"Sala {numSala} vacía, se procede a cerrarla...");
+                    //keepTrying = false;
                     //esto por poner algo para cerrarlo y no tener todo el tiempo un while true
                 }
             } while (keepTrying);
@@ -64,9 +65,12 @@ namespace ChatRoom
         public string MuestraLista(int numSala)
         {
             string res = "Lista de personas en la sala:";
-            foreach (Usuario usuario in listaDeUsuarios[numSala])
+            lock (l)
             {
-                res += "\n\r" + usuario.nombre + "@" + usuario.ie.Address;
+                foreach (Usuario usuario in listaDeUsuarios[numSala])
+                {
+                    res += "\n\r" + usuario.nombre + "@" + usuario.ie.Address;
+                }
             }
             return res;
         }
@@ -105,7 +109,10 @@ namespace ChatRoom
             if (nombre != null)
             {
                 Usuario cliente = new Usuario(socSala.socket, nombre, socSala.sala);
-                listaDeUsuarios[socSala.sala].Add(cliente);
+                lock (l)
+                {
+                    listaDeUsuarios[socSala.sala].Add(cliente);
+                }
                 Console.WriteLine(cliente.nombre + "@" + cliente.ie.Address);
                 try
                 {
@@ -114,9 +121,12 @@ namespace ChatRoom
                     using (cliente.sr = new StreamReader(cliente.ns))
                     {
                         cliente.sw.AutoFlush = true;
-                        foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                        lock (l)
                         {
-                            usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
+                            foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                            {
+                                usuario.sw.WriteLine($"Usuario {cliente.nombre}@{cliente.ie.Address} se ha unido a la sala {cliente.numSala}");
+                            }
                         }
                         while (cliente.isConnected)
                         {
@@ -124,12 +134,15 @@ namespace ChatRoom
                             if (mensaje == "#exit" || mensaje == null)
                             {
                                 cliente.isConnected = false;
-                                listaDeUsuarios[cliente.numSala].Remove(cliente);
-                                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                lock (l)
                                 {
-                                    usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
+                                    listaDeUsuarios[cliente.numSala].Remove(cliente);
+                                    foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                    {
+                                        usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} se ha desconectado");
+                                    }
                                 }
-                                if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
+                                //if (listaDeUsuarios[cliente.numSala].Count == 0) socketSalaChat[cliente.numSala].Close();
                             }
                             else if (mensaje == "#lista")
                             {
@@ -138,9 +151,12 @@ namespace ChatRoom
                             }
                             else
                             {
-                                foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                lock (l)
                                 {
-                                    if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                                    foreach (Usuario usuario in listaDeUsuarios[cliente.numSala])
+                                    {
+                                        if (usuario != cliente) usuario.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address}: " + mensaje);
+                                    }
                                 }
                             }
                         }
@@ -149,10 +165,13 @@ namespace ChatRoom
                 }
                 catch (IOException)
                 {
-                    listaDeUsuarios[cliente.numSala].Remove(cliente);
-                    foreach (Usuario usr in listaDeUsuarios[cliente.numSala])
+                    lock (l)
                     {
-                        usr.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} tried to swim in lava");
+                        listaDeUsuarios[cliente.numSala].Remove(cliente);
+                        foreach (Usuario usr in listaDeUsuarios[cliente.numSala])
+                        {
+                            usr.sw.WriteLine($"{cliente.nombre}@{cliente.ie.Address} tried to swim in lava");
+                        }
                     }
                 }
             }
