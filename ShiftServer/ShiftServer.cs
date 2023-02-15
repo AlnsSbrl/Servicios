@@ -17,6 +17,7 @@ namespace ShiftServer
         int port = 31416;
         int backUpPort = 1024;
         IPEndPoint ie;
+        private readonly object l = new object();
 
         public void ReadNames(string srcAlumnosPermitidos, string srcWaitingQueue)
         {
@@ -24,7 +25,11 @@ namespace ShiftServer
             {
                 using (StreamReader sr = new StreamReader(srcAlumnosPermitidos))
                 {
-                    users = sr.ReadLine().Split(';');
+                    string? inpu = sr.ReadLine();
+                    if (inpu != null)
+                    {
+                        users = inpu.Split(';');
+                    }
                 }
                 using (QueueReader sr = new QueueReader(new FileStream(srcWaitingQueue, FileMode.Open)))
                 {
@@ -47,13 +52,21 @@ namespace ShiftServer
                 Console.WriteLine("no se pudo acceder al archivo");
             }
         }
-        public int ReadPin(string src)
+        public int ReadPin(string src)//>999
         {
             try
             {
                 using (BinaryReader br = new BinaryReader(new FileStream(src, FileMode.Open)))
                 {
-                    return br.ReadInt32();
+                    int a = br.ReadInt32();
+                    if (a > 999)
+                    {
+                        return a;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
                 }
             }
             catch (Exception ex) when (ex is IOException || ex is FileNotFoundException || ex is ObjectDisposedException || ex is UnauthorizedAccessException)
@@ -92,6 +105,7 @@ namespace ShiftServer
                         Console.WriteLine($"Hallo Welt {port}"); //hello world
                         Socket sClient = socket.Accept();
                         Thread hiloCliente = new Thread(ClientThread);
+                        hiloCliente.IsBackground = true;
                         hiloCliente.Start(sClient);
                     }
                 }
@@ -113,8 +127,8 @@ namespace ShiftServer
                 using (StreamReader sr = new StreamReader(ns))
                 using (StreamWriter sw = new StreamWriter(ns))
                 {
-                    sw.WriteLine("HALT, schreib deinen Name bitte"); //el ptsd de tener que buscar declinaciones......socorro        (ALTO, escribe tu nombre porfa)
-                    sw.Flush();
+                    //sw.WriteLine("HALT, schreib deinen Name bitte"); //el ptsd de tener que buscar declinaciones......socorro        (ALTO, escribe tu nombre porfa)
+                    //sw.Flush();
                     string? nombreUsuario = sr.ReadLine();
                     if (nombreUsuario != null)
                     {
@@ -148,13 +162,25 @@ namespace ShiftServer
                         }
                         else
                         {
-                            foreach (string usuariosPermitidos in users)
+                            lock (l)
                             {
-                                if (nombreUsuario == usuariosPermitidos) isUser = true;
+                                foreach (string usuariosPermitidos in users)
+                                {
+                                    if (nombreUsuario == usuariosPermitidos)
+                                    {
+                                        isUser = true;
+                                        break;
+                                    }
+                                }
                             }
                             if (isUser)
                             {
                                 sw.WriteLine("ok");
+                                sw.Flush();
+                            }
+                            else
+                            {
+                                sw.WriteLine("ERROR01");
                                 sw.Flush();
                             }
                         }
@@ -201,35 +227,40 @@ namespace ShiftServer
                                             break;
 
                                         case string e when e == "list" && input.Length == 1:
-                                            if (waitingQueue.Count > 0)
+                                            lock (l)
                                             {
-                                                for (int i = 0; i < waitingQueue.Count; i++)
+                                                if (waitingQueue.Count > 0)
                                                 {
-                                                    sw.WriteLine($"{i}\t{waitingQueue.GetByIndex(i)}");
+                                                    for (int i = 0; i < waitingQueue.Count; i++)
+                                                    {
+                                                        sw.WriteLine($"{i}\t{waitingQueue.GetByIndex(i)}");
+                                                        sw.Flush();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    sw.WriteLine("Der Warteliste ist leer"); //la lista ta vacia
                                                     sw.Flush();
                                                 }
-                                            }
-                                            else
-                                            {
-                                                sw.WriteLine("Der Warteliste ist leer"); //la lista ta vacia
-                                                sw.Flush();
                                             }
                                             break;
 
                                         case string e when e == "add" && input.Length == 1:
-                                            
-                                            if (waitingQueue.ContainsValue(nombreUsuario))//ª es porque el valor no solo es el nombre, sino tambien el indice y la hora zzzzzz
+                                            lock (l)
                                             {
-                                                //todo crear una clase, entonces la coleccion no es de strings, y sobreescribo el equals para que solo compruebe el nombre de usuario, no solo la fecha
-                                                sw.WriteLine("WARUM versuchst du zwei Mal im Warteliste aufschreiben??"); //por qué te intentas anotar dos veces en la lista???                                      
+                                                if (waitingQueue.ContainsValue(nombreUsuario))//ª es porque el valor no solo es el nombre, sino tambien el indice y la hora zzzzzz
+                                                {
+                                                    //todo crear una clase, entonces la coleccion no es de strings, y sobreescribo el equals para que solo compruebe el nombre de usuario, no solo la fecha
+                                                    sw.WriteLine("WARUM versuchst du zwei Mal im Warteliste aufschreiben??"); //por qué te intentas anotar dos veces en la lista???                                      
+                                                }
+                                                else
+                                                {
+                                                    Queue nuevoUserEnCola = new Queue(nombreUsuario, DateTime.Now.Ticks);
+                                                    waitingQueue.Add(waitingQueue.Count, nuevoUserEnCola);
+                                                    sw.WriteLine("Fertig"); //hecho
+                                                }
+                                                sw.Flush();
                                             }
-                                            else
-                                            {
-                                                Queue nuevoUserEnCola = new Queue(nombreUsuario, DateTime.Now.Ticks);
-                                                waitingQueue.Add(waitingQueue.Count, nuevoUserEnCola);
-                                                sw.WriteLine("Fertig"); //hecho
-                                            }
-                                            sw.Flush();
                                             break;
 
                                         default:
@@ -265,9 +296,12 @@ namespace ShiftServer
                 string src = Environment.GetEnvironmentVariable("userprofile") + "/waitingList.txt";
                 using (QueueWriter sw = new QueueWriter(new FileStream(src, FileMode.Create)))
                 {
-                    foreach (Queue queue in waitingQueue.Values)
+                    lock (l)
                     {
-                        sw.Write(queue);
+                        foreach (Queue queue in waitingQueue.Values)
+                        {
+                            sw.Write(queue);
+                        }
                     }
                 }
             }
@@ -284,7 +318,16 @@ namespace ShiftServer
             {
                 try
                 {
-                    waitingQueue.Remove(pos);
+                    lock (l)
+                    {
+                        waitingQueue.Remove(pos);
+                        SortedList aux = new SortedList();
+                        for (int i = 0; i < waitingQueue.Count; i++)
+                        {
+                            aux.Add(aux.Count, waitingQueue.GetByIndex(i)); //me siento SUCIO
+                        }
+                        waitingQueue = aux;
+                    }
                     passed = true;
                 }
                 catch (ArgumentOutOfRangeException)
