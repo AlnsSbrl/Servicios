@@ -8,12 +8,13 @@ namespace AdivinaAlPiloto
 {
     internal class Record
     {
-        public string name;
+        public char[] name;
         public int time;
 
         public Record(string name, int time)
         {
-            this.name = name;
+            
+            this.name = name.Substring(0,3).ToUpper().ToCharArray();
             this.time = time;
         }
     }

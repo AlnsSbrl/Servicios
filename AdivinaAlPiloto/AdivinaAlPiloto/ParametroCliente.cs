@@ -10,7 +10,7 @@ namespace AdivinaAlPiloto
 	internal class ParametroCliente
 	{
 		public Socket socket;
-		public List<int> years;
+		//public List<int> years;
 		public NetworkStream ns;
 		public StreamReader sr;
 		public StreamWriter sw;
@@ -21,8 +21,8 @@ namespace AdivinaAlPiloto
 			ns = new NetworkStream(socket);
 			sr = new StreamReader(ns);
 			sw = new StreamWriter(ns);
-			years = new List<int>();
-			years.Add(2022);
+			//years = new List<int>();
+			//years.Add(2022);
 		}
 	}
 }
