@@ -121,10 +121,12 @@
             this.Name = "SalaChat";
             this.Text = "SalaChat";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SalaChat_FormClosing);
+            this.Load += new System.EventHandler(this.SalaChat_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

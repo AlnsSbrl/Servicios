@@ -34,9 +34,7 @@ namespace ClienteChat
                 usuario.sr.ReadLine();
                 usuario.sw.WriteLine(usuario.nombre);
             }
-            Thread hiloLeer = new Thread(LeeMensajes);
-            hiloLeer.Start();
-            hiloLeer.IsBackground = true;
+          
         }
         public void LeeMensajes()
         {
@@ -60,6 +58,7 @@ namespace ClienteChat
                         }
                         else if (!salir)
                         {
+                            //lock(this)
                             cambiaLosMensajes(msg, true);
                         }
                     }
@@ -87,8 +86,11 @@ namespace ClienteChat
                 /*la idea era en un panel ir poniendo el componente mensaje, que separa el nombre del usuario del mensaje
                  y los coloca de manera más vistosa (mensajes del usuario a la derecha, mensajes del resto a la izquierda),
                 igual añadir evento on click para responder a ese mensaje...endless ideas*/
-                listBoxMensajes.Items.Add(posIzq ? "" + msg : "\t" + msg);
-                if (listBoxMensajes.Items.Count > 10) listBoxMensajes.Items.RemoveAt(0);
+                lock (this)
+                {
+                    listBoxMensajes.Items.Add(posIzq ? "" + msg : "\t" + msg);
+                    if (listBoxMensajes.Items.Count > 10) listBoxMensajes.Items.RemoveAt(0);
+                }
             }));
         }
 
@@ -171,6 +173,13 @@ namespace ClienteChat
             {
                 Console.WriteLine("algo pasa mm");
             }
+        }
+
+        private void SalaChat_Load(object sender, EventArgs e)
+        {
+            Thread hiloLeer = new Thread(LeeMensajes);
+            hiloLeer.Start();
+            hiloLeer.IsBackground = true;
         }
     }
 }
