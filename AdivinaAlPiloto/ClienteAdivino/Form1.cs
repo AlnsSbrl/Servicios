@@ -31,7 +31,7 @@ namespace ClienteAdivino
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse(IPServer), port);
                 sock.Connect(ep);
             }
-            catch (SocketException ex) when (ex.ErrorCode==(int)SocketError.AccessDenied)
+            catch (SocketException ex) when (ex.ErrorCode == (int)SocketError.AccessDenied)
             {
                 Text = "petó for some reason";
             }
@@ -43,7 +43,12 @@ namespace ClienteAdivino
                 {
                     sw.WriteLine(((Button)sender).Tag.ToString());
                     sw.Flush();
-                    Text = sr.ReadLine();
+                    string palabro = sr.ReadLine();
+                    if (palabro != null)
+                    {
+                        FormJuego f = new FormJuego(palabro);
+                        f.ShowDialog();
+                    }
                 }
             }
             sock.Close();

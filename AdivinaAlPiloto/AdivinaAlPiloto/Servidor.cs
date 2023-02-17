@@ -181,7 +181,6 @@ namespace AdivinaAlPiloto
         public bool añadeRecord(string reccc)
         {
             bool isInserted = false;
-            //comprobar si puedo hacer esto tbh, se le puede pasar el param vacio jjjjj
             string name;
             string recordTime;
             if (reccc.Length > 3)

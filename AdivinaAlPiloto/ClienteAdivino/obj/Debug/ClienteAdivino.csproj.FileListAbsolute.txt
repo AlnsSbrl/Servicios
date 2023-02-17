@@ -9,3 +9,4 @@ C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\Client
 C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.csproj.CoreCompileInputs.cache
 C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.exe
 C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.pdb
+C:\Users\Pablo\Desktop\Servicios\AdivinaAlPiloto\ClienteAdivino\obj\Debug\ClienteAdivino.FormJuego.resources
