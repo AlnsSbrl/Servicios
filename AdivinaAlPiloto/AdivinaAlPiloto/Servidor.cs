@@ -18,7 +18,7 @@ namespace AdivinaAlPiloto
         int port = 42069;
         IPEndPoint ie;
         public List<int> years; //se escoge aleatoriamente un año de estos de la lista, y de ese año aleatoriamente un piloto de la lista que devuelve la api
-        string path = "";
+        string path = Environment.GetEnvironmentVariable("userprofile")+"/recordsF1.bin";
         public List<Record> records;
         int pin = 1234;
         public void LeeRecords()
@@ -46,7 +46,7 @@ namespace AdivinaAlPiloto
 
             }
         }
-        public void EscribeRecord()
+        public void EscribeRecords()
         {
             try
             {
@@ -72,6 +72,7 @@ namespace AdivinaAlPiloto
             records = new List<Record>();
             records.Capacity = 3;
             years.Add(2022);
+            LeeRecords();
             do
             {
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -207,6 +208,13 @@ namespace AdivinaAlPiloto
                         records.Insert(records.Count, newRcord);
                         isInserted = true;
                     }
+                }
+            }
+            if (isInserted)
+            {
+                lock (l)
+                {
+                    EscribeRecords();
                 }
             }
 

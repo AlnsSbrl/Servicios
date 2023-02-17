@@ -14,7 +14,7 @@ namespace AdivinaAlPiloto
 
         public Record ReadRecord()
         {
-            string name = base.ReadString();
+            char[] name = base.ReadChars(3);
             int time = base.ReadInt32();
             return new Record(name, time);
         }
