@@ -17,9 +17,11 @@ namespace ClienteAdivino
     {
         int port = 42069;
         string IPServer = "127.0.0.1";
+        string name="";
         public Form1()
         {
             InitializeComponent();
+            btnPlay.Enabled = false;
         }
 
         private void ButtonConnection_Click(object sender, EventArgs e)
@@ -46,12 +48,27 @@ namespace ClienteAdivino
                     string palabro = sr.ReadLine();
                     if (palabro != null)
                     {
-                        FormJuego f = new FormJuego(palabro);
+                        name = textBox1.Text;
+                        FormJuego f = new FormJuego(palabro,name,port,IPServer);
                         f.ShowDialog();
                     }
                 }
             }
             sock.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Text.Length!=3)
+            {
+                btnPlay.Enabled = false;
+                textBox1.BackColor = Color.Red;
+            }
+            else
+            {
+                btnPlay.Enabled=true;
+                textBox1.BackColor = Color.White;
+            }
         }
     }
 }

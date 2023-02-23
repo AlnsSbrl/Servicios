@@ -159,7 +159,7 @@ namespace AdivinaAlPiloto
                                 sw.Flush();
                             }
                             break;
-                        case string e when e == "a" && msg.Length == 2:
+                        case string e when e == "add" && msg.Length == 2:
                             if (añadeRecord(msg[1]))
                             {
                                 sw.Write("ACCEPT");
@@ -288,6 +288,7 @@ namespace AdivinaAlPiloto
             {
                 for (int i = 0; i < records.Count; i++)
                 {
+                    Console.WriteLine(records[i].name);
                     muestraRecords += String.Format($"\r\n{records[i].name}\t{records[i].time}");
                 }
                 muestraRecords += "\r\nFin";
